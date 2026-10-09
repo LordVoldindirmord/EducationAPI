@@ -1,0 +1,12 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Education.Domain.DTO.Request.Authentication
+{
+    public record ForgotPasswordRequest
+    {
+        [Required(ErrorMessage = "Email обязателен")]
+        [EmailAddress(ErrorMessage = "Некорректный Email")]
+        [MaxLength(256, ErrorMessage = "Максимальная длина Email 256 символов")]
+        public string Email { get; init; } = null!;
+    }
+}

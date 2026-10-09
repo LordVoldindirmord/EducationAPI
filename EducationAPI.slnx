@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/DAL/">
+    <Project Path="Education.DAL/Education.DAL.csproj" />
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="Education.Domain/Education.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Service/">
+    <Project Path="Education.Service/Education.Service.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="UnitTests/UnitTests.csproj" Id="2c5a46cf-8e71-4e56-be19-7e802bbea35c" />
+  </Folder>
+  <Project Path="EducationAPI/EducationAPI.csproj" />
+</Solution>
