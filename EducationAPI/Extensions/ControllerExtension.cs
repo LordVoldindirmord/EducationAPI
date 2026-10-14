@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EducationAPI.Extensions
 {
+    /// <summary>
+    /// Расширение для контроллера
+    /// </summary>
     public static class ControllerExtension
     {
         /// <summary>

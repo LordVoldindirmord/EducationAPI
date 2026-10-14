@@ -2,6 +2,9 @@
 
 namespace EducationAPI.Extensions
 {
+    /// <summary>
+    /// Содержит методы-расширения для <see cref="WebApplication"/>.
+    /// </summary>
     public static class WebApplicationExtension
     {
         /// <summary>

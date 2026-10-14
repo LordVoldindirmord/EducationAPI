@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace EducationAPI.Extensions
 {
+    /// <summary>
+    /// Расширения над IServiceCollection
+    /// </summary>
     public static class ServiceCollectionExtension
     {
         public const string FRONTEND_POLICY_CORS_NAME = "AllowFrontend";

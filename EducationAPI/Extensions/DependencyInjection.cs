@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EducationAPI.Extensions
 {
+    /// <summary>
+    /// Настройка DI контейнера
+    /// </summary>
     public static class DependencyInjection
     {
         private const string CONNECTION_STRING_NAME = "DefaultConnection";

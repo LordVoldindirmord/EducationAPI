@@ -4,8 +4,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace EducationAPI.Extensions
 {
+    /// <summary>
+    /// Настройка Identity
+    /// </summary>
     public static class IdentityExtension
     {
+        /// <summary>
+        /// Добавить Identity в middleware
+        /// </summary>
         public static void AddIdentity(this IServiceCollection services)
         {
             services.AddDataProtection();
@@ -28,6 +34,10 @@ namespace EducationAPI.Extensions
             .AddDefaultTokenProviders();
         }
 
+        /// <summary>
+        /// Добавить работу с Cookie
+        /// </summary>
+        /// <param name="services"></param>
         private static void AddCookie(this IServiceCollection services)
         {
             services

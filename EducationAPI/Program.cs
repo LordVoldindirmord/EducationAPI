@@ -4,9 +4,13 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
+// Dependency Injection
 builder.Services.AddEducationServices(builder.Configuration);
+// Регистрация Identity
 builder.Services.AddIdentity();
+// Добавление нормального парсинга Enum в JSON (без этого enum будет конвертироваться в число)
 builder.Services.AddControllersWithJson();
+// Нужно для нормальной работы с React
 builder.Services.AddFrontendCors();
 
 var app = builder.Build();
@@ -21,6 +25,7 @@ if (app.Environment.IsDevelopment())
 
 #endregion
 
+// Запуск всех сидеров
 await app.SeedDatabaseAsync();
 
 app.UseHttpsRedirection();
