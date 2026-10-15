@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Education.Domain.DTO.Request.Authentication
+namespace Education.Domain.DTO.Request.Auth
 {
-    public record ForgotPasswordRequest
+    public record ResendConfirmationRequest
     {
         [Required(ErrorMessage = "Email обязателен")]
         [EmailAddress(ErrorMessage = "Некорректный Email")]

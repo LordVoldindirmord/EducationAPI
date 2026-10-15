@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Education.Domain.DTO.Request.Authentication
+namespace Education.Domain.DTO.Request.Auth
 {
     public record ConfirmEmailRequest
     {

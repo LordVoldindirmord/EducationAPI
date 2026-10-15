@@ -39,6 +39,9 @@ namespace Education.Service.Auth.Implementations
 
             using var client = new SmtpClient();
 
+            // Потом удалить, это отключение проверки SSL сертификата
+            client.CheckCertificateRevocation = false;
+
             try
             {
                 await client.ConnectAsync(host, port, MailKit.Security.SecureSocketOptions.StartTls);

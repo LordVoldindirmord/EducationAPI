@@ -24,11 +24,11 @@ namespace Education.Service.Auth.Implementations
 
         private string BuildLink(string pathKey, Guid userId, string token)
         {
-            var baseUrl = _configuration["API:BaseUrl"]
-                ?? throw new InvalidOperationException("API:BaseUrl не настроен");
+            var baseUrl = _configuration["Frontend:BaseUrl"]
+                ?? throw new InvalidOperationException("Frontend:BaseUrl не настроен");
 
-            var path = _configuration[$"API:{pathKey}"]
-                ?? throw new InvalidOperationException($"API:{pathKey} не настроен");
+            var path = _configuration[$"Frontend:{pathKey}"]
+                ?? throw new InvalidOperationException($"Frontend:{pathKey} не настроен");
 
             return $"{baseUrl}{path}?userId={userId}&token={Uri.EscapeDataString(token)}";
         }

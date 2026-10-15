@@ -1,5 +1,5 @@
-﻿using Education.Domain.DTO.Request.Authentication;
-using Education.Domain.DTO.Response.Authentication;
+﻿using Education.Domain.DTO.Request.Auth;
+using Education.Domain.DTO.Response.Auth;
 using Education.Domain.Entity;
 using Education.Domain.Enums;
 using Education.Domain.Extensions;

@@ -1,4 +1,4 @@
-﻿using Education.Domain.DTO.Request.Authentication;
+﻿using Education.Domain.DTO.Request.Auth;
 using Education.Service.Auth.Interfaces;
 using EducationAPI.Extensions;
 using Microsoft.AspNetCore.Mvc;

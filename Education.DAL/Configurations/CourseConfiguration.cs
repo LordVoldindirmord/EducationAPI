@@ -32,6 +32,10 @@ namespace Education.DAL.Configurations
                 .HasPrecision(18, 2);
 
             builder
+                .HasIndex(c => new { c.CategoryId, c.Title })
+                .IsUnique();
+
+            builder
                 .HasOne(cour => cour.Category)
                 .WithMany(cat => cat.Courses)
                 .HasForeignKey(cour => cour.CategoryId)

@@ -5,6 +5,10 @@ using Education.DAL.Seeder.Interfaces;
 using Education.DAL.Seeder.Seeders;
 using Education.Service.Auth.Implementations;
 using Education.Service.Auth.Interfaces;
+using Education.Service.Common.Implementations;
+using Education.Service.Common.Interfaces;
+using Education.Service.Courses.Implemenations;
+using Education.Service.Courses.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace EducationAPI.Extensions
@@ -63,12 +67,19 @@ namespace EducationAPI.Extensions
 
         private static void AddServices(this IServiceCollection services)
         {
+            // Auth
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IEmailTemplateBuilder, EmailTemplateBuilder>();
             services.AddScoped<ILinkGenerator, Education.Service.Auth.Implementations.LinkGenerator>();
             services.AddScoped<ISignInService, SignInService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+            // Common
+            services.AddScoped<IPermissionService, PermissionService>();
+
+            // Courses
+            services.AddScoped<ICategoryService, CategoryService>();
 
             services.AddHttpContextAccessor();
         }

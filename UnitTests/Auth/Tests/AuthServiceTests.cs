@@ -1,4 +1,4 @@
-﻿using Education.Domain.DTO.Request.Authentication;
+﻿using Education.Domain.DTO.Request.Auth;
 using Education.Domain.Entity;
 using Education.Domain.Enums;
 using Education.Service.Auth.Implementations;

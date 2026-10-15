@@ -18,11 +18,14 @@ namespace Education.DAL.Configurations
                 .Property(c => c.Description)
                 .HasMaxLength(100);
 
-            // Нужно подумать насчет дефолта
             builder
                 .Property(c => c.CreatedAt)
                 .HasColumnType("timestamp with time zone")
                 .HasDefaultValueSql("now()");
+
+            builder
+                .HasIndex(c => c.Name)
+                .IsUnique();
         }
     }
 }

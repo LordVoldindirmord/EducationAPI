@@ -80,6 +80,9 @@ namespace Education.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Categories");
                 });
 
@@ -120,7 +123,8 @@ namespace Education.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId", "Title")
+                        .IsUnique();
 
                     b.ToTable("Courses");
                 });

@@ -1,6 +1,6 @@
 ﻿using Education.Domain.Enums;
 
-namespace Education.Domain.DTO.Response.Authentication
+namespace Education.Domain.DTO.Response.Auth
 {
     public record LoginResponse
     {
