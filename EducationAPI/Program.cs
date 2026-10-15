@@ -8,6 +8,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddEducationServices(builder.Configuration);
 // Регистрация Identity
 builder.Services.AddIdentity();
+// Добавление авторизации
+builder.Services.AddAuthorizationPolicies();
 // Добавление нормального парсинга Enum в JSON (без этого enum будет конвертироваться в число)
 builder.Services.AddControllersWithJson();
 // Нужно для нормальной работы с React

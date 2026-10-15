@@ -2,6 +2,7 @@
 using Education.Service.Auth.Interfaces;
 using Education.Service.Courses.Interfaces;
 using EducationAPI.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EducationAPI.Controllers.Web
@@ -21,6 +22,7 @@ namespace EducationAPI.Controllers.Web
             _currentUser = currentUser;
         }
 
+        [Authorize(Policy = AuthorizationExtension.ADMIN_OR_MODERATOR)]
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] CreateCategoryRequest request)
         {
@@ -34,6 +36,7 @@ namespace EducationAPI.Controllers.Web
             return this.ToActionResult(response);
         }
 
+        [Authorize(Policy = AuthorizationExtension.ADMIN_OR_MODERATOR)]
         [HttpDelete("delete")]
         public async Task<IActionResult> Delete([FromBody] DeleteCategoryRequest request)
         {
@@ -47,6 +50,7 @@ namespace EducationAPI.Controllers.Web
             return this.ToActionResult(response);
         }
 
+        [Authorize (Policy = AuthorizationExtension.ADMIN_OR_MODERATOR)]
         [HttpPut("update")]
         public async Task<IActionResult> Update([FromBody] UpdateCategoryRequest request)
         {
