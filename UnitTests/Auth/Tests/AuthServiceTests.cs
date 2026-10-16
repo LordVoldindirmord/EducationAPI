@@ -41,17 +41,6 @@ namespace UnitTests.Auth.Tests
         #region RegisterAsync
 
         [Fact]
-        public async Task RegisterAsync_PasswordsDoNotMatch_ReturnsBadRequest()
-        {
-            var request = new RegisterRequest { Password = "a", ConfirmPassword = "b" };
-
-            var result = await _sut.RegisterAsync(request);
-
-            result.IsSuccess.Should().BeFalse();
-            result.StatusCode.Should().Be(StatusCode.BadRequest);
-        }
-
-        [Fact]
         public async Task RegisterAsync_LoginExists_ReturnsConflict()
         {
             var request = new RegisterRequest { Email = "e@test.com", Login = "login", Password = "pass", ConfirmPassword = "pass" };

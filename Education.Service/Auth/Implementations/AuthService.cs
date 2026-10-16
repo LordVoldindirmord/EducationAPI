@@ -135,10 +135,6 @@ namespace Education.Service.Auth.Implementations
 
         public async Task<InternalResponse<bool>> RegisterAsync(RegisterRequest request)
         {
-            // Проверка совпадения паролей
-            if (request.Password != request.ConfirmPassword)
-                return CreatorResponse.BadRequest<bool>("Пароли не совпадают");
-
             // Проверка занятости Email
             var existingByEmail = await _userManager.FindByEmailAsync(request.Email);
 
@@ -241,10 +237,6 @@ namespace Education.Service.Auth.Implementations
             // Проверка, подтверждён ли Email
             if (!await _userManager.IsEmailConfirmedAsync(user))
                 return CreatorResponse.Conflict<bool>("Email не подтвержден");
-
-            // Проверка совпадения паролей
-            if (request.NewPassword != request.ConfirmNewPassword)
-                return CreatorResponse.BadRequest<bool>("Пароли не совпадают");
 
             // Сброс пароля
             var resetResult = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);

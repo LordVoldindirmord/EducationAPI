@@ -10,7 +10,12 @@ namespace Education.Domain.DTO.Request.Auth
         public string Email { get; init; } = null!;
 
         [Required(ErrorMessage = "Login обязателен для заполнения")]
-        [MaxLength(32, ErrorMessage = "Максимальная длина Login может быть 256 символов")]
+        [MaxLength(256, ErrorMessage = "Максимальная длина Login может быть 256 символов")]
+        [RegularExpression
+        (
+            @"^[a-zA-Z0-9_-]+$",
+            ErrorMessage = "Login может содержать только буквы, цифры, символы '_', '-'"
+        )]
         public string Login { get; init; } = null!;
 
         [Required(ErrorMessage = "Имя обязательно для заполнения")]
