@@ -19,9 +19,9 @@ namespace EducationAPI.Extensions
         public const string ADMIN_OR_MODERATOR = "AdminOrModerator";
 
         /// <summary>
-        /// Доступ для администратора, модератора или учителя
+        /// Доступ для администратора, модератора или создателя курсов
         /// </summary>
-        public const string ADMIN_OR_MODERATOR_OR_TEACHER = "AdminOrModeratorOrTeacher";
+        public const string ADMIN_OR_MODERATOR_OR_COURSE_CREATOR = "AdminOrModeratorOrCourseCreator";
 
         public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
         {
@@ -42,12 +42,12 @@ namespace EducationAPI.Extensions
                     )
                 );
 
-                // Admin или Moderator или Teacher
-                options.AddPolicy(ADMIN_OR_MODERATOR_OR_TEACHER, policy =>
+                // Admin или Moderator или CourseCreator
+                options.AddPolicy(ADMIN_OR_MODERATOR_OR_COURSE_CREATOR, policy =>
                     policy.RequireRole(
                         UserRole.Admin.RoleToDbString(),
                         UserRole.Moderator.RoleToDbString(),
-                        UserRole.Teacher.RoleToDbString()
+                        UserRole.CourseCreator.RoleToDbString()
                     )
                 );
             });

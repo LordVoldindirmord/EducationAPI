@@ -1,12 +1,12 @@
 ﻿using Education.DAL.Interfaces;
-using Education.Domain.DTO.Request.Courses.Category;
+using Education.Domain.DTO.Request.Courses.Categories;
 using Education.Domain.Entity;
 using Education.Domain.Enums;
 using Education.Domain.ResponseModel;
 using Education.Service.Common.Interfaces;
 using Education.Service.Courses.Interfaces;
 
-namespace Education.Service.Courses.Implemenations
+namespace Education.Service.Courses.Implementations
 {
     public class CategoryService : ICategoryService
     {

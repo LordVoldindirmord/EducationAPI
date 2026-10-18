@@ -5,7 +5,7 @@
 namespace Education.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class CategoryDebug : Migration
+    public partial class AddCategoryAndCourseUniqueIndex : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

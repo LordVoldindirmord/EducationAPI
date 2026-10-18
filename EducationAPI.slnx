@@ -8,7 +8,11 @@
   <Folder Name="/Service/">
     <Project Path="Education.Service/Education.Service.csproj" />
   </Folder>
-  <Folder Name="/Tests/">
+  <Folder Name="/Tests/" />
+  <Folder Name="/Tests/IntegrationTests/">
+    <Project Path="IntegrationTests/IntegrationTests.csproj" Id="c267b565-93a3-46e3-9e56-38fb55738f62" />
+  </Folder>
+  <Folder Name="/Tests/UnitTests/">
     <Project Path="UnitTests/UnitTests.csproj" Id="2c5a46cf-8e71-4e56-be19-7e802bbea35c" />
   </Folder>
   <Project Path="EducationAPI/EducationAPI.csproj" />

@@ -1,7 +1,7 @@
 using System;
 using Education.Domain.Entity;
 
-namespace UnitTests.Auth.Helpers
+namespace UnitTests.Helpers
 {
     public static class UserFactory
     {

@@ -9,7 +9,7 @@ namespace Education.Domain.Entity
     /// тех, кто <b>управляет</b> курсом: владельца, менеджеров, учителей.
     /// </para>
     /// <para>
-    /// Связь M:1 между <see cref="UserEntity"/> и <see cref="CourseEntity"/> с указанием роли.
+    /// Связь M:N между <see cref="UserEntity"/> и <see cref="CourseEntity"/> с указанием роли.
     /// </para>
     /// <para>
     /// Один пользователь может быть участником нескольких курсов с разными ролями,

@@ -7,10 +7,10 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Moq;
-using UnitTests.Auth.Helpers;
 using Education.Domain.Extensions;
+using UnitTests.Helpers;
 
-namespace UnitTests.Auth.Tests
+namespace UnitTests.Tests.Auth
 {
     public class AuthServiceTests
     {
@@ -146,7 +146,7 @@ namespace UnitTests.Auth.Tests
             _userManagerMock.Setup(m => m.FindByEmailAsync(request.LoginOrEmail)).ReturnsAsync(user);
             _userManagerMock.Setup(m => m.CheckPasswordAsync(user, request.Password)).ReturnsAsync(true);
             _signInServiceMock.Setup(s => s.SignInAsync(user, true)).Returns(Task.CompletedTask);
-            _userManagerMock.Setup(m => m.GetRolesAsync(user)).ReturnsAsync(new List<string> { UserRole.Student.RoleToDbString() });
+            _userManagerMock.Setup(m => m.GetRolesAsync(user)).ReturnsAsync(new List<string> { UserRole.User.RoleToDbString() });
 
             var result = await _sut.LoginAsync(request);
 
@@ -154,7 +154,7 @@ namespace UnitTests.Auth.Tests
             result.StatusCode.Should().Be(StatusCode.OK);
             result.Data!.Email.Should().Be(request.LoginOrEmail);
             result.Data.Login.Should().Be(user.UserName);
-            result.Data.Role.Should().Be(UserRole.Student);
+            result.Data.Role.Should().Be(UserRole.User);
         }
 
         #endregion
@@ -212,7 +212,7 @@ namespace UnitTests.Auth.Tests
 
             _userManagerMock.Setup(m => m.FindByIdAsync(req.UserId.ToString())).ReturnsAsync(user);
             _userManagerMock.Setup(m => m.ConfirmEmailAsync(user, req.Token)).ReturnsAsync(IdentityResult.Success);
-            _userManagerMock.Setup(m => m.GetRolesAsync(user)).ReturnsAsync(new List<string> { UserRole.Student.RoleToDbString() });
+            _userManagerMock.Setup(m => m.GetRolesAsync(user)).ReturnsAsync(new List<string> { UserRole.User.RoleToDbString() });
 
             var result = await _sut.ConfirmEmailAsync(req);
 

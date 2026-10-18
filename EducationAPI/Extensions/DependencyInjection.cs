@@ -7,7 +7,7 @@ using Education.Service.Auth.Implementations;
 using Education.Service.Auth.Interfaces;
 using Education.Service.Common.Implementations;
 using Education.Service.Common.Interfaces;
-using Education.Service.Courses.Implemenations;
+using Education.Service.Courses.Implementations;
 using Education.Service.Courses.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -80,6 +80,8 @@ namespace EducationAPI.Extensions
 
             // Courses
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICourseMembershipService, CourseMembershipService>();
+            services.AddScoped<ICourseService, CourseService>();
 
             services.AddHttpContextAccessor();
         }

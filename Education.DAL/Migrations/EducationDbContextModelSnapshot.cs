@@ -153,9 +153,10 @@ namespace Education.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("CourseId", "UserId")
+                        .IsUnique();
 
                     b.ToTable("CourseMembers");
                 });

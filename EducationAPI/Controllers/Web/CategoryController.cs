@@ -1,4 +1,4 @@
-﻿using Education.Domain.DTO.Request.Courses.Category;
+﻿using Education.Domain.DTO.Request.Courses.Categories;
 using Education.Service.Auth.Interfaces;
 using Education.Service.Courses.Interfaces;
 using EducationAPI.Extensions;

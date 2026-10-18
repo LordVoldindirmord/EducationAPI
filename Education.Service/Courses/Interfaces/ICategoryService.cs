@@ -1,8 +1,11 @@
-﻿using Education.Domain.DTO.Request.Courses.Category;
+﻿using Education.Domain.DTO.Request.Courses.Categories;
 using Education.Domain.ResponseModel;
 
 namespace Education.Service.Courses.Interfaces
 {
+    /// <summary>
+    /// Сервис для управлния категориями курсов
+    /// </summary>
     public interface ICategoryService
     {
         /// <summary>

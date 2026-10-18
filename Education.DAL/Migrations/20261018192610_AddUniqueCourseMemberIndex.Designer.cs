@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Education.DAL.Migrations
 {
     [DbContext(typeof(EducationDbContext))]
-    [Migration("20261014213906_CategoryDebug")]
-    partial class CategoryDebug
+    [Migration("20261018192610_AddUniqueCourseMemberIndex")]
+    partial class AddUniqueCourseMemberIndex
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -156,9 +156,10 @@ namespace Education.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CourseId");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("CourseId", "UserId")
+                        .IsUnique();
 
                     b.ToTable("CourseMembers");
                 });

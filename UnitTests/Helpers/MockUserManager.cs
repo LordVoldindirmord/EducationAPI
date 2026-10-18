@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace UnitTests.Auth.Helpers
+namespace UnitTests.Helpers
 {
     public static class MockUserManager
     {

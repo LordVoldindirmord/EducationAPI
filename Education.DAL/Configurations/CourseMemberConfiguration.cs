@@ -35,6 +35,10 @@ namespace Education.DAL.Configurations
                 .WithMany(u => u.CourseMemberships)
                 .HasForeignKey(m => m.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder
+                .HasIndex(m => new { m.CourseId, m.UserId })
+                .IsUnique();
         }
 
         private static string ConvertCourseRoleToString(CourseRole role) => role switch

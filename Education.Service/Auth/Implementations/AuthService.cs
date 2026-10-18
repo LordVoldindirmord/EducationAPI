@@ -165,7 +165,7 @@ namespace Education.Service.Auth.Implementations
             }
 
             // Назначение роли по умолчанию
-            var addRoleResult = await _userManager.AddToRoleAsync(user, UserRole.Student.RoleToDbString());
+            var addRoleResult = await _userManager.AddToRoleAsync(user, UserRole.User.RoleToDbString());
 
             if (!addRoleResult.Succeeded)
             {
@@ -260,7 +260,7 @@ namespace Education.Service.Auth.Implementations
         {
             var roles = await _userManager.GetRolesAsync(user);
 
-            var primaryRole = roles.FirstOrDefault() ?? UserRole.Student.RoleToDbString();
+            var primaryRole = roles.FirstOrDefault() ?? UserRole.User.RoleToDbString();
 
             var role = primaryRole.DbStringToRole();
 

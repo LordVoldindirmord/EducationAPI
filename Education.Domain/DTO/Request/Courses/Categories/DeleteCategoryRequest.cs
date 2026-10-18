@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Education.Domain.DTO.Request.Courses.Category
+namespace Education.Domain.DTO.Request.Courses.Categories
 {
     public record DeleteCategoryRequest
     {

@@ -10,8 +10,8 @@ namespace Education.Domain.Extensions
             {
                 UserRole.Admin => "admin",
                 UserRole.Moderator => "moderator",
-                UserRole.Teacher => "teacher",
-                UserRole.Student => "student",
+                UserRole.CourseCreator => "course_creator",
+                UserRole.User => "user",
                 _ => throw new ArgumentOutOfRangeException(nameof(role), role, "Неизвестный тип роли"),
             };
         }
@@ -22,8 +22,8 @@ namespace Education.Domain.Extensions
             {
                 "admin" => UserRole.Admin,
                 "moderator" => UserRole.Moderator,
-                "teacher" => UserRole.Teacher,
-                "student" => UserRole.Student,
+                "course_creator" => UserRole.CourseCreator,
+                "user" => UserRole.User,
                 _ => throw new ArgumentOutOfRangeException(nameof(value), value, "Неизвестный тип роли"),
             };
         }

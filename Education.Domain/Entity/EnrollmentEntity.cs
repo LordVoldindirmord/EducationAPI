@@ -7,7 +7,7 @@
     /// эта сущность описывает <b>студентов</b>, которые проходят курс.
     /// </para>
     /// <para>
-    /// Связь M:1 между <see cref="UserEntity"/> и <see cref="CourseEntity"/>
+    /// Связь M:N между <see cref="UserEntity"/> и <see cref="CourseEntity"/>
     /// с дополнительными данными о прогрессе обучения.
     /// </para>
     /// <para>

@@ -16,13 +16,13 @@
         Moderator,
 
         /// <summary>
-        /// Учитель
+        /// Создатель курсов
         /// </summary>
-        Teacher,
+        CourseCreator,
 
         /// <summary>
-        /// Ученик
+        /// Обычный пользователь
         /// </summary>
-        Student,
+        User,
     }
 }
