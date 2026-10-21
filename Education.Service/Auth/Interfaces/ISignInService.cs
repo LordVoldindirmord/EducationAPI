@@ -3,7 +3,7 @@
 namespace Education.Service.Auth.Interfaces
 {
     /// <summary>
-    /// Сервис для работы с сессиями, JWT, Cookie
+    /// <b>ВНУТРЕННИЙ</b> сервис для работы с сессиями, JWT, Cookie
     /// </summary>
     public interface ISignInService
     {

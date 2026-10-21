@@ -26,6 +26,10 @@ namespace Education.DAL.Configurations
                 .WithMany(c => c.Enrollments)
                 .HasForeignKey(e => e.CourseId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasIndex(e => new { e.UserId, e.CourseId })
+                .IsUnique();
         }
     }
 }

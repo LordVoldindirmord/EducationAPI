@@ -1,7 +1,7 @@
 ﻿namespace Education.Service.Auth.Interfaces
 {
     /// <summary>
-    /// Сервис для отправки Email писем
+    /// <b>ВНУТРЕННИЙ</b> сервис для отправки Email писем
     /// </summary>
     public interface IEmailService
     {

@@ -4,7 +4,7 @@ using Education.Domain.ResponseModel;
 namespace Education.Service.Common.Interfaces
 {
     /// <summary>
-    /// Сервис для проверки ролей и прав пользователя
+    /// <b>ВНУТРЕННИЙ</b> сервис для проверки ролей и прав пользователя из БД
     /// </summary>
     public interface IPermissionService
     {

@@ -1,7 +1,7 @@
 ﻿namespace Education.Service.Auth.Interfaces
 {
     /// <summary>
-    /// Сервис для генерации ссылок
+    /// <b>ВНУТРЕННИЙ</b> сервис для генерации ссылок
     /// </summary>
     public interface ILinkGenerator
     {

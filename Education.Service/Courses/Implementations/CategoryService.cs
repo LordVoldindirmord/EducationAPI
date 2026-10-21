@@ -52,7 +52,7 @@ namespace Education.Service.Courses.Implementations
             await _categoryRepository.CreateAsync(category);
             await _categoryRepository.SaveChangesAsync();
 
-            return CreatorResponse.Ok(true, "Категория успешно создана");
+            return CreatorResponse.Created(true, "Категория успешно создана");
         }
 
         public async Task<InternalResponse<bool>> DeleteCategoryAsync(DeleteCategoryRequest request, Guid userId)

@@ -1,7 +1,7 @@
 ﻿namespace Education.Service.Auth.Interfaces
 {
     /// <summary>
-    /// Сервис для генерации писем для отправки на Email
+    /// <b>ВНУТРЕННИЙ</b> сервис для генерации писем для отправки на Email
     /// </summary>
     public interface IEmailTemplateBuilder
     {
