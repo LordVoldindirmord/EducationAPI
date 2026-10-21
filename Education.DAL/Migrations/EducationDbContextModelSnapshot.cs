@@ -161,58 +161,6 @@ namespace Education.DAL.Migrations
                     b.ToTable("CourseMembers");
                 });
 
-            modelBuilder.Entity("Education.Domain.Entity.CoursePurchaseEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)");
-
-                    b.Property<string>("PaymentMethod")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<decimal>("PricePaid")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<string>("TransactionId")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("UserId", "CourseId")
-                        .IsUnique();
-
-                    b.ToTable("CoursePurchases");
-                });
-
             modelBuilder.Entity("Education.Domain.Entity.EnrollmentEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -312,6 +260,59 @@ namespace Education.DAL.Migrations
                     b.ToTable("Modules");
                 });
 
+            modelBuilder.Entity("Education.Domain.Entity.PurchaseEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<decimal>("PricePaid")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<string>("PurchaseType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<string>("TransactionId")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Purchase");
+
+                    b.UseTptMappingStrategy();
+                });
+
             modelBuilder.Entity("Education.Domain.Entity.QuizLessonEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -341,57 +342,6 @@ namespace Education.DAL.Migrations
 
                             t.HasCheckConstraint("CK_QuizLessons_TimeLimitMinutes", "\"TimeLimitMinutes\" IS NULL OR \"TimeLimitMinutes\" > 0");
                         });
-                });
-
-            modelBuilder.Entity("Education.Domain.Entity.RolePurchaseEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
-
-                    b.Property<string>("Currency")
-                        .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)");
-
-                    b.Property<string>("PaymentMethod")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<decimal>("PricePaid")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("numeric(18,2)");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<string>("TransactionId")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RolePurchases");
                 });
 
             modelBuilder.Entity("Education.Domain.Entity.TestQuestionEntity", b =>
@@ -696,6 +646,30 @@ namespace Education.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Education.Domain.Entity.CoursePurchaseEntity", b =>
+                {
+                    b.HasBaseType("Education.Domain.Entity.PurchaseEntity");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("CoursePurchase", (string)null);
+                });
+
+            modelBuilder.Entity("Education.Domain.Entity.RolePurchaseEntity", b =>
+                {
+                    b.HasBaseType("Education.Domain.Entity.PurchaseEntity");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("RolePurchase", (string)null);
+                });
+
             modelBuilder.Entity("Education.Domain.Entity.CourseEntity", b =>
                 {
                     b.HasOne("Education.Domain.Entity.CategoryEntity", "Category")
@@ -719,25 +693,6 @@ namespace Education.DAL.Migrations
                         .WithMany("CourseMemberships")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Education.Domain.Entity.CoursePurchaseEntity", b =>
-                {
-                    b.HasOne("Education.Domain.Entity.CourseEntity", "Course")
-                        .WithMany("Purchases")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Education.Domain.Entity.UserEntity", "User")
-                        .WithMany("CoursePurchases")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Course");
@@ -786,6 +741,17 @@ namespace Education.DAL.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("Education.Domain.Entity.PurchaseEntity", b =>
+                {
+                    b.HasOne("Education.Domain.Entity.UserEntity", "User")
+                        .WithMany("Purchases")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Education.Domain.Entity.QuizLessonEntity", b =>
                 {
                     b.HasOne("Education.Domain.Entity.LessonEntity", "Lesson")
@@ -795,25 +761,6 @@ namespace Education.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Lesson");
-                });
-
-            modelBuilder.Entity("Education.Domain.Entity.RolePurchaseEntity", b =>
-                {
-                    b.HasOne("Education.Domain.Entity.AppRoleEntity", "Role")
-                        .WithMany("Purchases")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Education.Domain.Entity.UserEntity", "User")
-                        .WithMany("RolePurchases")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Education.Domain.Entity.TestQuestionEntity", b =>
@@ -919,6 +866,40 @@ namespace Education.DAL.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Education.Domain.Entity.CoursePurchaseEntity", b =>
+                {
+                    b.HasOne("Education.Domain.Entity.CourseEntity", "Course")
+                        .WithMany("Purchases")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Education.Domain.Entity.PurchaseEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Education.Domain.Entity.CoursePurchaseEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("Education.Domain.Entity.RolePurchaseEntity", b =>
+                {
+                    b.HasOne("Education.Domain.Entity.PurchaseEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Education.Domain.Entity.RolePurchaseEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Education.Domain.Entity.AppRoleEntity", "Role")
+                        .WithMany("Purchases")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("Education.Domain.Entity.AppRoleEntity", b =>
                 {
                     b.Navigation("Purchases");
@@ -965,11 +946,9 @@ namespace Education.DAL.Migrations
                 {
                     b.Navigation("CourseMemberships");
 
-                    b.Navigation("CoursePurchases");
-
                     b.Navigation("Enrollments");
 
-                    b.Navigation("RolePurchases");
+                    b.Navigation("Purchases");
 
                     b.Navigation("UserProgresses");
                 });

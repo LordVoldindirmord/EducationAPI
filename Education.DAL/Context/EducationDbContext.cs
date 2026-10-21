@@ -29,9 +29,7 @@ namespace Education.DAL.Context
 
         public DbSet<UserProgressEntity> UserProgresses { get; set; }
 
-        public DbSet<CoursePurchaseEntity> CoursePurchases { get; set; }
-
-        public DbSet<RolePurchaseEntity> RolePurchases { get; set; }
+        public DbSet<PurchaseEntity> Purchase { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

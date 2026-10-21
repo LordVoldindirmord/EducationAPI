@@ -38,14 +38,9 @@ namespace Education.Domain.Entity
         public ICollection<EnrollmentEntity> Enrollments { get; set; } = new List<EnrollmentEntity>();
 
         /// <summary>
-        /// Покупки курсов пользователем
+        /// Покупки пользователя
         /// </summary>
-        public ICollection<CoursePurchaseEntity> CoursePurchases { get; set; } = new List<CoursePurchaseEntity>();
-
-        /// <summary>
-        /// Покупки ролей пользователем
-        /// </summary>
-        public ICollection<RolePurchaseEntity> RolePurchases { get; set; } = new List<RolePurchaseEntity>();
+        public ICollection<PurchaseEntity> Purchases { get; set; } = new List<PurchaseEntity>();
 
         /// <summary>
         /// Прогресс пользователя
