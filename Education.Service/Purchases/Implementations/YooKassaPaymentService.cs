@@ -1,4 +1,5 @@
-﻿using Education.Domain.InternalServiceModels.Payments;
+﻿using Education.Domain.DTO.Response.Payment;
+using Education.Domain.InternalServiceModels.Purchases;
 using Education.Domain.ResponseModel;
 using Education.Service.Purchases.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -21,8 +22,7 @@ namespace Education.Service.Purchases.Implementations
         {
             _logger = logger;
 
-            // 1. Создаем клиент с тестовыми или боевыми ключами.
-            // SDK поддерживает как синхронный Client, так и AsyncClient для async/await [citation:1][citation:2].
+            // Создаем клиент с ключами
             var client = new Client(
                 shopId: options.Value.ShopId,
                 secretKey: options.Value.SecretKey);
@@ -38,8 +38,8 @@ namespace Education.Service.Purchases.Implementations
         {
             try
             {
-                // 2. Формируем запрос на создание платежа.
-                // ConfirmationType.Redirect означает, что мы перенаправим пользователя на страницу ЮKassa [citation:1].
+                // Формируем запрос на создание платежа
+                // ConfirmationType.Redirect - перенаправим пользователя на страницу ЮKassa
                 var newPayment = new NewPayment
                 {
                     Amount = new Amount { Value = amount, Currency = currency },
@@ -52,16 +52,15 @@ namespace Education.Service.Purchases.Implementations
                     Capture = true // Автоматическое списание после оплаты (одностадийный платеж)
                 };
 
-                // 3. Отправляем запрос. Idempotence-Key генерируется автоматически внутри SDK.
+                // Отправляем запрос. Idempotence-Key генерируется автоматически внутри SDK
                 var payment = await _client.CreatePaymentAsync(newPayment);
 
-                _logger.LogInformation("Создан платеж ЮKassa. Id: {PaymentId}, Статус: {Status}",
-                    payment.Id, payment.Status);
+                _logger.LogInformation($"Создан платеж ЮKassa. Id: {payment.Id}, Статус: {payment.Status}");
 
-                // 4. Возвращаем результат для нашего сервиса покупок.
+                // Возвращаем результат для нашего сервиса покупок
                 var result = new PaymentResult
                 {
-                    PaymentId = payment.Id,
+                    TransactionId = payment.Id,
                     ConfirmationUrl = payment.Confirmation?.ConfirmationUrl
                 };
 
@@ -70,7 +69,8 @@ namespace Education.Service.Purchases.Implementations
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Ошибка при создании платежа в ЮKassa на сумму {Amount} {Currency}", amount, currency);
-                return CreatorResponse.InternalError<PaymentResult>("Не удалось создать платеж. Попробуйте позже.");
+
+                return CreatorResponse.InternalError<PaymentResult>("Не удалось создать платеж. Попробуйте позже");
             }
         }
 
@@ -78,53 +78,54 @@ namespace Education.Service.Purchases.Implementations
         {
             try
             {
-                // 5. Запрашиваем актуальную информацию о платеже.
-                // Это важно, так как вебхук может быть поддельным. ЮKassa рекомендует перепроверять статус [citation:18].
+                // Запрашиваем актуальную информацию о платеже
+                // Это важно, так как вебхук может быть поддельным
                 var payment = await _client.GetPaymentAsync(paymentId);
 
                 if (payment == null)
-                    return CreatorResponse.NotFound<bool>("Платеж не найден в системе ЮKassa.");
+                    return CreatorResponse.NotFound<bool>("Платеж не найден в системе ЮKassa");
 
-                // 6. Проверяем, что платеж действительно успешен.
+                // Проверяем, что платеж действительно успешен.
                 if (payment.Status == PaymentStatus.Succeeded && payment.Paid)
                 {
-                    _logger.LogInformation("Платеж {PaymentId} успешно подтвержден.", paymentId);
-                    return CreatorResponse.Ok(true, "Платеж подтвержден.");
+                    _logger.LogInformation($"Платеж {paymentId} успешно подтвержден");
+
+                    return CreatorResponse.Ok(true, "Платеж подтвержден");
                 }
 
-                _logger.LogWarning("Платеж {PaymentId} не может быть подтвержден. Статус: {Status}, Paid: {Paid}",
-                    paymentId, payment.Status, payment.Paid);
+                _logger.LogWarning(
+                    $"Платеж {paymentId} не может быть подтвержден. " +
+                    $"Статус: {payment.Status}, Paid: {payment.Paid}"
+                );
 
                 return CreatorResponse.BadRequest<bool>($"Платеж не подтвержден. Текущий статус: {payment.Status}");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при проверке статуса платежа {PaymentId}", paymentId);
-                return CreatorResponse.InternalError<bool>("Не удалось проверить статус платежа.");
+                _logger.LogError(ex, $"Ошибка при проверке статуса платежа {paymentId}");
+
+                return CreatorResponse.InternalError<bool>("Не удалось проверить статус платежа");
             }
         }
 
         public async Task<InternalResponse<bool>> FailPaymentAsync(string paymentId, string? reason = null)
         {
-            // В реальной жизни "отклонить" платеж вручную через API нельзя.
-            // Платеж сам переходит в статус canceled, если пользователь отказался или произошла ошибка.
-            // Этот метод нужен скорее для внутренней логики (например, если мы получили вебхук payment.canceled).
-            _logger.LogWarning("Платеж {PaymentId} помечен как неудачный. Причина: {Reason}", paymentId, reason);
+            _logger.LogWarning($"Платеж {paymentId} помечен как неудачный. Причина: {reason}");
 
-            // Здесь можно просто вернуть Ok, так как фактическое состояние уже в ЮKassa.
-            return CreatorResponse.Ok(true, "Платеж помечен как неудачный.");
+            // Здесь можно просто вернуть Ok, так как фактическое состояние уже в ЮKassa
+            return CreatorResponse.Ok(true, "Платеж помечен как неудачный");
         }
 
         public async Task<InternalResponse<bool>> RefundPaymentAsync(string paymentId)
         {
             try
             {
-                // 7. Создаем возврат. SDK требует передать Id платежа и сумму.
-                // Для полного возврата нужно знать исходную сумму. 
-                // В реальном сценарии её можно получить из БД (CoursePurchase.PricePaid) или запросить платеж.
-                var payment = await _client.GetPaymentAsync(paymentId);
+                // Создаем возврат. SDK требует передать Id платежа и сумму.
+                // Для полного возврата нужно знать исходную сумму
+                Payment payment = await _client.GetPaymentAsync(paymentId);
+
                 if (payment == null)
-                    return CreatorResponse.NotFound<bool>("Платеж не найден.");
+                    return CreatorResponse.NotFound<bool>("Платеж не найден");
 
                 var refundRequest = new NewRefund
                 {
@@ -134,25 +135,16 @@ namespace Education.Service.Purchases.Implementations
 
                 var refund = await _client.CreateRefundAsync(refundRequest);
 
-                _logger.LogInformation("Создан возврат {RefundId} по платежу {PaymentId}. Статус: {Status}",
-                    refund.Id, paymentId, refund.Status);
+                _logger.LogInformation($"Создан возврат {refund.Id} по платежу {paymentId}. Статус: {refund.Status}");
 
-                return CreatorResponse.Ok(true, "Возврат успешно инициирован.");
+                return CreatorResponse.Ok(true, "Возврат успешно инициирован");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка при создании возврата по платежу {PaymentId}", paymentId);
-                return CreatorResponse.InternalError<bool>("Не удалось создать возврат.");
+                _logger.LogError(ex, $"Ошибка при создании возврата по платежу {paymentId}");
+
+                return CreatorResponse.InternalError<bool>("Не удалось создать возврат");
             }
         }
-    }
-
-    /// <summary>
-    /// Настройки для подключения к ЮKassa.
-    /// </summary>
-    public class YooKassaOptions
-    {
-        public string ShopId { get; set; } = null!;
-        public string SecretKey { get; set; } = null!;
     }
 }

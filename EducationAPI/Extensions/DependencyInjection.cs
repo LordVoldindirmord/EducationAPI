@@ -3,12 +3,15 @@ using Education.DAL.Interfaces;
 using Education.DAL.Repositories;
 using Education.DAL.Seeder.Interfaces;
 using Education.DAL.Seeder.Seeders;
+using Education.Domain.InternalServiceModels.Purchases;
 using Education.Service.Auth.Implementations;
 using Education.Service.Auth.Interfaces;
 using Education.Service.Common.Implementations;
 using Education.Service.Common.Interfaces;
 using Education.Service.Courses.Implementations;
 using Education.Service.Courses.Interfaces;
+using Education.Service.Purchases.Implementations;
+using Education.Service.Purchases.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace EducationAPI.Extensions
@@ -32,7 +35,7 @@ namespace EducationAPI.Extensions
             services.AddRepositories();
 
             // Добавление сервисов
-            services.AddServices();
+            services.AddServices(configuration);
 
             // Регистрация Seeder для инициализации БД начальными значениями
             services.AddSeeder();
@@ -52,20 +55,19 @@ namespace EducationAPI.Extensions
         {
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICourseMemberRepository, CourseMemberRepository>();
-            services.AddScoped<ICoursePurchaseRepository, CoursePurchaseRepository>();
+            services.AddScoped<IPurchaseRepository, PurchaseRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
             services.AddScoped<ILessonRepository, LessonRepository>();
             services.AddScoped<IModuleRepository, ModuleRepository>();
             services.AddScoped<IQuizLessonRepository, QuizLessonRepository>();
-            services.AddScoped<IRolePurchaseRepository, RolePurchaseRepository>();
             services.AddScoped<ITestQuestionRepository, TestQuestionRepository>();
             services.AddScoped<ITextLessonRepository, TextLessonRepository>();
             services.AddScoped<IUserProgressRepository, UserProgressRepository>();
             services.AddScoped<IVideoLessonRepository, VideoLessonRepository>();
         }
 
-        private static void AddServices(this IServiceCollection services)
+        private static void AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Auth
             services.AddScoped<IAuthService, AuthService>();
@@ -80,8 +82,17 @@ namespace EducationAPI.Extensions
 
             // Courses
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICourseAccessService, CourseAccessService>();
             services.AddScoped<ICourseMembershipService, CourseMembershipService>();
             services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<IEnrollmentService, EnrollmentService>();
+
+            // Purchases
+            services.AddScoped<ICoursePurchaseHandler, CoursePurchaseHandler>();
+            services.AddScoped<IPaymentService, YooKassaPaymentService>();
+            services.AddScoped<IPurchaseService, PurchaseService>();
+            services.AddScoped<IRolePurchaseHandler, RolePurchaseHandler>();
+            services.Configure<YooKassaOptions>(configuration.GetSection("YooKassa"));
 
             services.AddHttpContextAccessor();
         }
