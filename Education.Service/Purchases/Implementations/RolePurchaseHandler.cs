@@ -120,6 +120,7 @@ namespace Education.Service.Purchases.Implementations
             catch (Exception)
             {
                 await dbTransaction.RollbackAsync();
+
                 return CreatorResponse.InternalError<bool>("Ошибка при завершении покупки роли");
             }
         }

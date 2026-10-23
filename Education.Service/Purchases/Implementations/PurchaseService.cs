@@ -11,6 +11,9 @@ namespace Education.Service.Purchases.Implementations
 {
     public class PurchaseService : IPurchaseService
     {
+        // WARNING: При инициализации покупки обязательно заполнять PurchaseType
+        // Без этого будет баг, платеж всегда будет идти по курсам
+
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IPaymentService _paymentService;
         private readonly ICoursePurchaseHandler _coursePurchaseHandler;
@@ -105,7 +108,8 @@ namespace Education.Service.Purchases.Implementations
                 PricePaid = response.Data!.Price,
                 Currency = "RUB",
                 TransactionId = paymentResult.Data!.TransactionId,
-                Status = PurchaseStatus.Pending
+                Status = PurchaseStatus.Pending,
+                PurchaseType = PurchaseType.Course
             };
 
             await _purchaseRepository.CreateAsync(purchase);
@@ -138,7 +142,8 @@ namespace Education.Service.Purchases.Implementations
                 PricePaid = role.Data!.Price,
                 Currency = "RUB",
                 TransactionId = paymentResult.Data!.TransactionId,
-                Status = PurchaseStatus.Pending
+                Status = PurchaseStatus.Pending,
+                PurchaseType = PurchaseType.Role
             };
 
             await _purchaseRepository.CreateAsync(purchase);
