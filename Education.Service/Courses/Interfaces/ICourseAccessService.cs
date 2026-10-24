@@ -4,14 +4,11 @@ using Education.Domain.Enums;
 namespace Education.Service.Courses.Interfaces
 {
     /// <summary>
-    /// <b>ВНУТРЕННИЙ</b> сервис для проверки доступа пользователя к курсу.
+    /// <b>ВНУТРЕННИЙ</b> сервис для проверки доступа пользователя к курсу
     /// <para>
     /// Агрегирует <see cref="ICourseMembershipService"/> (управляющие)
     /// и <see cref="IEnrollmentService"/> (студенты), давая единый ответ
-    /// на вопрос: «что пользователь может делать с этим курсом?».
-    /// </para>
-    /// <para>
-    /// Не пишет в БД. Только читает.
+    /// на вопрос: "что пользователь может делать с этим курсом"
     /// </para>
     /// </summary>
     public interface ICourseAccessService

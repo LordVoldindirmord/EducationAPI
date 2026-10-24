@@ -5,7 +5,6 @@ using Education.Domain.Enums;
 using Education.Domain.Extensions;
 using FluentAssertions;
 using IntegrationTests.Helpers;
-using Microsoft.AspNetCore.Identity;
 
 namespace IntegrationTests.Tests.Auth
 {

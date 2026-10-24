@@ -4,7 +4,7 @@ using Education.Domain.ResponseModel;
 namespace Education.Service.Purchases.Interfaces
 {
     /// <summary>
-    /// Обработчик покупки курса
+    /// <b>ВНУТРЕННИЙ</b> сервис для обработки покупок курса
     /// <para>
     /// Отвечает за валидацию перед покупкой и за выдачу/отзыв доступа к курсу
     /// </para>

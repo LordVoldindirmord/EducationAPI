@@ -1,11 +1,9 @@
-﻿using Education.DAL.Context;
-using Education.DAL.Interfaces;
+﻿using Education.DAL.Interfaces;
 using Education.Domain.DTO.Response.Payment;
 using Education.Domain.Entity;
 using Education.Domain.Enums;
 using Education.Domain.ResponseModel;
 using Education.Service.Purchases.Interfaces;
-using Yandex.Checkout.V3;
 
 namespace Education.Service.Purchases.Implementations
 {

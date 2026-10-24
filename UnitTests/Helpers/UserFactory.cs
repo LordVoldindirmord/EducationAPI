@@ -1,4 +1,3 @@
-using System;
 using Education.Domain.Entity;
 
 namespace UnitTests.Helpers

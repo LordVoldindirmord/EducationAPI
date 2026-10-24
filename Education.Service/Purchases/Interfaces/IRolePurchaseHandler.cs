@@ -4,7 +4,7 @@ using Education.Domain.ResponseModel;
 namespace Education.Service.Purchases.Interfaces
 {
     /// <summary>
-    /// Обработчик покупки роли
+    /// <b>ВНУТРЕННИЙ</b> сервис для обработки покупок роли
     /// <para>
     /// Отвечает за валидацию перед покупкой и за выдачу/отзыв глобальной роли пользователю
     /// </para>

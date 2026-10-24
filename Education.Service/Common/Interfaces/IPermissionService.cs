@@ -1,5 +1,4 @@
 ﻿using Education.Domain.Enums;
-using Education.Domain.ResponseModel;
 
 namespace Education.Service.Common.Interfaces
 {

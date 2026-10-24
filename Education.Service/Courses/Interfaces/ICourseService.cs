@@ -5,19 +5,7 @@ using Education.Domain.Enums;
 namespace Education.Service.Courses.Interfaces
 {
     /// <summary>
-    /// Сервис для управления курсами.
-    /// <para>
-    /// Работает с метаданными курса (название, описание, изображение, цена, публикация).
-    /// Управление модулями и уроками — зона <c>IModuleService</c> / <c>ILessonService</c>.
-    /// </para>
-    /// <para>
-    /// Проверка доступа комбинирует глобальные роли платформы
-    /// (<see cref="UserRole.Admin"/>,
-    /// <see cref="UserRole.Moderator"/>)
-    /// и локальные роли в курсе
-    /// (<see cref="CourseRole.Owner"/>,
-    /// <see cref="CourseRole.Manager"/>).
-    /// </para>
+    /// Сервис для управления курсами
     /// </summary>
     public interface ICourseService
     {

@@ -1,5 +1,4 @@
-﻿using Education.Domain.Entity;
-using Education.Domain.ResponseModel;
+﻿using Education.Domain.ResponseModel;
 
 namespace Education.Service.Courses.Interfaces
 {
