@@ -54,5 +54,16 @@ namespace EducationAPI.Controllers.Web
 
             return this.ToActionResult(response);
         }
+
+        /// <summary>
+        /// Оформить возврат средств за покупку (курс или роль)
+        /// </summary>
+        [HttpPost("refund")]
+        public async Task<IActionResult> RefundPurchase([FromBody] RefundRequest request)
+        {
+            var response = await _purchaseService.RefundPurchaseAsync(request.TransactionId);
+
+            return this.ToActionResult(response);
+        }
     }
 }

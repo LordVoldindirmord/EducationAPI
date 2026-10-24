@@ -50,6 +50,13 @@ namespace EducationAPI.Controllers.Web
                         await _purchaseService.FailPurchaseAsync(transactionId, "Отменено ЮKassa");
                         break;
 
+                    case "refund.succeeded":
+                        // Если возврат был сделан не через наш API (например, вручную в ЮKassa)
+                        // Нам нужно найти покупку по ID возврата или платежа и обновить статус
+                        // По идее у нас все это происходит уже в логике возврата, но здесь можно перестраховаться
+                        _logger.LogInformation("Получен вебхук о возврате: {TransactionId}", transactionId);
+                        break;
+
                     default:
                         // В сучае непредвиденных обстоятельств
                         _logger.LogWarning("Неизвестное событие от ЮKassa: {Event}", eventType);
