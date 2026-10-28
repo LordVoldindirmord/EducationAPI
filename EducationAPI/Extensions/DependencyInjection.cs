@@ -10,6 +10,8 @@ using Education.Service.Common.Implementations;
 using Education.Service.Common.Interfaces;
 using Education.Service.Courses.Implementations;
 using Education.Service.Courses.Interfaces;
+using Education.Service.Files.Implementations;
+using Education.Service.Files.Interfaces;
 using Education.Service.Purchases.Implementations;
 using Education.Service.Purchases.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -79,6 +81,26 @@ namespace EducationAPI.Extensions
 
             // Common
             services.AddScoped<IPermissionService, PermissionService>();
+
+            // Files
+            services.AddScoped<IFileManager>(provider =>
+            {
+                var environment = provider.GetRequiredService<IHostEnvironment>();
+
+                // По умолчанию берем родительскую папку EducationAPI
+                // При необходимости путь можно задать через FileStorage:RootPath.
+                var rootPath = Path.GetFullPath(
+                    configuration["FileStorage:RootPath"] ?? "..",
+                    environment.ContentRootPath);
+
+                // Размеры задаются в байтах. При отсутствии значения берем стандартный лимит.
+                var maxImageSize = configuration.GetValue<long?>("FileStorage:MaxImageSize")
+                    ?? FileManager.DEFAULT_MAX_IMAGE_SIZE;
+                var maxVideoSize = configuration.GetValue<long?>("FileStorage:MaxVideoSize")
+                    ?? FileManager.DEFAULT_MAX_VIDEO_SIZE;
+
+                return new FileManager(rootPath, maxImageSize, maxVideoSize);
+            });
 
             // Courses
             services.AddScoped<ICategoryService, CategoryService>();
