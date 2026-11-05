@@ -8,10 +8,17 @@ namespace Education.Service.Auth.Implementations
     public class EmailService : IEmailService
     {
         private readonly IConfiguration _configuration;
+        private readonly Func<ISmtpClient> _createClient;
 
-        public EmailService(IConfiguration configuration)
+        /// <summary>
+        /// Конструктор только для Unit тестов
+        /// </summary>
+        public EmailService(IConfiguration configuration) : this(configuration, () => new SmtpClient()) { }
+
+        public EmailService(IConfiguration configuration, Func<ISmtpClient> createClient)
         {
             _configuration = configuration;
+            _createClient = createClient;
         }
 
         public async Task SendEmailAsync(string to, string subject, string body)
@@ -37,7 +44,7 @@ namespace Education.Service.Auth.Implementations
                 Text = body
             };
 
-            using var client = new SmtpClient();
+            using var client = _createClient();
 
             // Потом удалить, это отключение проверки SSL сертификата
             client.CheckCertificateRevocation = false;

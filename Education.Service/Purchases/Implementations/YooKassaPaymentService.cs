@@ -16,6 +16,15 @@ namespace Education.Service.Purchases.Implementations
         private readonly AsyncClient _client;
         private readonly ILogger<YooKassaPaymentService> _logger;
 
+        /// <summary>
+        /// Конструктор для Unit тестов
+        /// </summary>
+        public YooKassaPaymentService(AsyncClient client, ILogger<YooKassaPaymentService> logger)
+        {
+            _client = client;
+            _logger = logger;
+        }
+
         public YooKassaPaymentService(
             IOptions<YooKassaOptions> options,
             ILogger<YooKassaPaymentService> logger)

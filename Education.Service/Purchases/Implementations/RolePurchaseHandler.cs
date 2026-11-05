@@ -102,7 +102,16 @@ namespace Education.Service.Purchases.Implementations
                 var currentRoles = await _userManager.GetRolesAsync(user);
 
                 if (currentRoles.Any())
-                    await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                {
+                    var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+                    if (!removeResult.Succeeded)
+                    {
+                        await dbTransaction.RollbackAsync();
+
+                        return CreatorResponse.InternalError<bool>("Не удалось удалить предыдущую роль");
+                    }
+                }
 
                 var result = await _userManager.AddToRoleAsync(user, role.Name!);
 
@@ -147,14 +156,28 @@ namespace Education.Service.Purchases.Implementations
                 if (user != null && role != null)
                 {
                     // Забираем купленную роль
-                    await _userManager.RemoveFromRoleAsync(user, role.Name!);
+                    var removeResult = await _userManager.RemoveFromRoleAsync(user, role.Name!);
+
+                    if (!removeResult.Succeeded)
+                    {
+                        await dbTransaction.RollbackAsync();
+
+                        return CreatorResponse.InternalError<bool>("Не удалось отозвать купленную роль");
+                    }
 
                     //  Возвращаем базовую роль User
                     var userRole = await _roleManager.FindByNameAsync(UserRole.User.RoleToDbString());
 
                     if (userRole != null)
                     {
-                        await _userManager.AddToRoleAsync(user, userRole.Name!);
+                        var addResult = await _userManager.AddToRoleAsync(user, userRole.Name!);
+
+                        if (!addResult.Succeeded)
+                        {
+                            await dbTransaction.RollbackAsync();
+
+                            return CreatorResponse.InternalError<bool>("Не удалось вернуть базовую роль");
+                        }
                     }
                 }
 

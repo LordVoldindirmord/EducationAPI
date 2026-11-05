@@ -18,7 +18,18 @@ namespace EducationAPI.Extensions
         public static IServiceCollection AddControllersWithJson(this IServiceCollection services)
         {
             services
-                .AddControllers()
+                .AddControllers(options =>
+                {
+                    options.ModelBinderProviders.Insert(0, new FormDecimalModelBinderProvider());
+
+                    var formFactory = options.ValueProviderFactories
+                        .OfType<Microsoft.AspNetCore.Mvc.ModelBinding.FormValueProviderFactory>()
+                        .Single();
+
+                    var index = options.ValueProviderFactories.IndexOf(formFactory);
+
+                    options.ValueProviderFactories[index] = new InvariantFormValueProviderFactory();
+                })
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
