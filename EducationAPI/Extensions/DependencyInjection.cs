@@ -107,7 +107,10 @@ namespace EducationAPI.Extensions
             services.AddScoped<ICourseAccessService, CourseAccessService>();
             services.AddScoped<ICourseMembershipService, CourseMembershipService>();
             services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<IModuleService, ModuleService>();
+            services.AddScoped<ILessonService, LessonService>();
             services.AddScoped<IEnrollmentService, EnrollmentService>();
+            services.AddScoped<IProgressService, ProgressService>();
 
             // Purchases
             services.AddScoped<ICoursePurchaseHandler, CoursePurchaseHandler>();

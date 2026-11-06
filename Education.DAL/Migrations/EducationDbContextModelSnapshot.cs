@@ -443,8 +443,14 @@ namespace Education.DAL.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("now()");
 
+                    b.Property<bool>("IsPassed")
+                        .HasColumnType("boolean");
+
                     b.Property<Guid>("LessonId")
                         .HasColumnType("uuid");
+
+                    b.Property<int?>("Score")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -456,7 +462,10 @@ namespace Education.DAL.Migrations
                     b.HasIndex("UserId", "LessonId")
                         .IsUnique();
 
-                    b.ToTable("UserProgresses");
+                    b.ToTable("UserProgresses", t =>
+                        {
+                            t.HasCheckConstraint("CK_UserProgresses_Score", "\"Score\" IS NULL OR (\"Score\" >= 0 AND \"Score\" <= 100)");
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

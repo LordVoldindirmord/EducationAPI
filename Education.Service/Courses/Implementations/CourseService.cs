@@ -148,10 +148,10 @@ namespace Education.Service.Courses.Implementations
 
             foreach (var lesson in course.Modules.SelectMany(m => m.Lessons))
             {
-                if (lesson.VideoLesson != null)
+                if (lesson is VideoLessonEntity video)
                 {
-                    files.Add(lesson.VideoLesson.VideoPath);
-                    files.Add(lesson.VideoLesson.ThumbnailPath);
+                    files.Add(video.VideoPath);
+                    files.Add(video.ThumbnailPath);
                 }
             }
             try

@@ -1,4 +1,4 @@
-using Education.DAL.Interfaces;
+﻿using Education.DAL.Interfaces;
 using Education.Domain.DTO.Request.Courses.Courses;
 using Education.Service.Auth.Interfaces;
 using Education.Service.Common.Interfaces;
@@ -217,7 +217,7 @@ public class CourseServiceTests
     {
         var course = Existing;
         course.Purchases.Add(new CoursePurchaseEntity { Status = PurchaseStatus.Failed });
-        course.Modules.Add(new ModuleEntity { OrderNumber = 1, Lessons = new List<LessonEntity> { new() { OrderNumber = 1, LessonType = LessonType.Video, VideoLesson = new VideoLessonEntity { VideoPath = "Videos/video.mp4", ThumbnailPath = OldImage } } } });
+        course.Modules.Add(new ModuleEntity { OrderNumber = 1, Lessons = new List<LessonEntity> { new VideoLessonEntity { OrderNumber = 1, LessonType = LessonType.Video, VideoPath = "Videos/video.mp4", ThumbnailPath = OldImage } } });
         _courses.Setup(c => c.GetWithContentAsync(_course)).ReturnsAsync(course);
         var saved = false;
         _courses.Setup(c => c.SaveChangesAsync()).Callback(() => saved = true).Returns(Task.CompletedTask);

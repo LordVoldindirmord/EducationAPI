@@ -15,7 +15,6 @@ namespace Education.DAL.Repositories
                 .Include(c => c.Enrollments)
                 .Include(c => c.Purchases)
                 .Include(c => c.Modules).ThenInclude(m => m.Lessons).ThenInclude(l => l.Progresses)
-                .Include(c => c.Modules).ThenInclude(m => m.Lessons).ThenInclude(l => l.VideoLesson)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(c => c.Id == courseId);
         }

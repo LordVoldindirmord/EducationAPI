@@ -10,6 +10,10 @@ namespace Education.DAL.Configurations
         {
             builder.HasKey(up => up.Id);
 
+            builder.ToTable(t => t.HasCheckConstraint(
+                "CK_UserProgresses_Score",
+                "\"Score\" IS NULL OR (\"Score\" >= 0 AND \"Score\" <= 100)"));
+
             builder
                 .Property(up => up.CompletedAt)
                 .HasColumnType("timestamp with time zone")

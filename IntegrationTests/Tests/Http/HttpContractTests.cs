@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
 using System.Reflection;
 using EducationAPI.Controllers.Web;
@@ -21,7 +21,10 @@ public class HttpContractTests(PostgresFixture postgres) : EndpointTestBase(post
         { "POST", "/api/category/create" }, { "PUT", "/api/category/update" }, { "DELETE", "/api/category/delete" },
         { "POST", "/api/course/create" }, { "PUT", "/api/course/update" },
         { "DELETE", "/api/course/delete" }, { "PUT", "/api/course/publish" },
+        { "POST", "/api/module/create" }, { "PUT", "/api/module/update" }, { "DELETE", "/api/module/delete" },
+        { "POST", "/api/lesson/create" }, { "PUT", "/api/lesson/update" }, { "DELETE", "/api/lesson/delete" },
         { "POST", "/api/payment/course" }, { "POST", "/api/payment/role" }, { "POST", "/api/payment/refund" },
+        { "POST", "/api/progress/submit-quiz" },
         { "POST", "/api/yookassa/webhook" },
     };
 
@@ -30,7 +33,9 @@ public class HttpContractTests(PostgresFixture postgres) : EndpointTestBase(post
         get
         {
             var cases = new TheoryData<string, string>();
-            foreach (var row in ProtectedEndpoints.Where(row => !((string)row[1]).StartsWith("/api/payment/")))
+            foreach (var row in ProtectedEndpoints.Where(row => !((string)row[1]).StartsWith("/api/payment/")
+                && !((string)row[1]).StartsWith("/api/module/") && !((string)row[1]).StartsWith("/api/lesson/")
+                && !((string)row[1]).StartsWith("/api/progress/")))
                 cases.Add((string)row[0], (string)row[1]);
             return cases;
         }
@@ -41,6 +46,10 @@ public class HttpContractTests(PostgresFixture postgres) : EndpointTestBase(post
         { "POST", "/api/category/create" }, { "PUT", "/api/category/update" }, { "DELETE", "/api/category/delete" },
         { "POST", "/api/course/create" }, { "PUT", "/api/course/update" },
         { "DELETE", "/api/course/delete" }, { "PUT", "/api/course/publish" },
+        { "POST", "/api/module/create" }, { "PUT", "/api/module/update" }, { "DELETE", "/api/module/delete" },
+        { "POST", "/api/lesson/create" }, { "PUT", "/api/lesson/update" }, { "DELETE", "/api/lesson/delete" },
+        { "POST", "/api/progress/complete/00000000-0000-0000-0000-000000000001" },
+        { "POST", "/api/progress/submit-quiz" },
         { "POST", "/api/payment/course" }, { "POST", "/api/payment/role" }, { "POST", "/api/payment/refund" },
     };
 
@@ -52,7 +61,8 @@ public class HttpContractTests(PostgresFixture postgres) : EndpointTestBase(post
             .SelectMany(t => t.GetMethods().SelectMany(m => m.GetCustomAttributes<HttpMethodAttribute>()
                 .SelectMany(a => a.HttpMethods.Select(verb => $"{verb} /{t.GetCustomAttribute<RouteAttribute>()!.Template}/{a.Template}"))))
             .ToArray();
-        var expected = BodyEndpoints.Select(row => $"{row[0]} {row[1]}").Append("POST /api/auth/logout");
+        var expected = BodyEndpoints.Select(row => $"{row[0]} {row[1]}").Append("POST /api/auth/logout")
+            .Append("POST /api/progress/complete/{lessonId:guid}");
         actual.Should().BeEquivalentTo(expected);
     }
 
@@ -62,7 +72,7 @@ public class HttpContractTests(PostgresFixture postgres) : EndpointTestBase(post
     {
         await LoginAsync("admin");
         using var request = new HttpRequestMessage(new HttpMethod(method), route);
-        if (route is "/api/course/create" or "/api/course/update")
+        if (route is "/api/course/create" or "/api/course/update" or "/api/lesson/create" or "/api/lesson/update")
             request.Content = new MultipartFormDataContent();
         else request.Content = new StringContent("", System.Text.Encoding.UTF8, "application/json");
         using var response = await Client.SendAsync(request);
@@ -93,6 +103,7 @@ public class HttpContractTests(PostgresFixture postgres) : EndpointTestBase(post
     [Theory]
     [MemberData(nameof(BodyEndpoints))]
     [InlineData("POST", "/api/auth/logout")]
+    [InlineData("POST", "/api/progress/complete/00000000-0000-0000-0000-000000000001")]
     public async Task Route_RejectsUnsupportedGetMethod(string method, string route)
     {
         using var response = await Client.GetAsync(route);
