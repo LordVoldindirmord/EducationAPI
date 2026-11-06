@@ -52,21 +52,6 @@ namespace Education.Domain.Entity
         public ModuleEntity Module { get; set; } = null!;
 
         /// <summary>
-        /// Видео-контент урока
-        /// </summary>
-        public VideoLessonEntity? VideoLesson { get; set; }
-
-        /// <summary>
-        /// Текстовый контент урока
-        /// </summary>
-        public TextLessonEntity? TextLesson { get; set; }
-
-        /// <summary>
-        /// Тестовый контент урока
-        /// </summary>
-        public QuizLessonEntity? QuizLesson { get; set; }
-
-        /// <summary>
         /// Прогресс пользователей по данному уроку
         /// </summary>
         public ICollection<UserProgressEntity> Progresses { get; set; } = new List<UserProgressEntity>();

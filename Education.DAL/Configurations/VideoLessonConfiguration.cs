@@ -8,7 +8,7 @@ namespace Education.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<VideoLessonEntity> builder)
         {
-            builder.HasKey(vl => vl.Id);
+            builder.ToTable("VideoLesson");
 
             builder
                 .Property(vl => vl.VideoPath)
@@ -17,12 +17,6 @@ namespace Education.DAL.Configurations
             builder
                 .Property(v => v.ThumbnailPath)
                 .HasMaxLength(128);
-
-            builder
-                .HasOne(vl => vl.Lesson)
-                .WithOne(l => l.VideoLesson)
-                .HasForeignKey<VideoLessonEntity>(vl => vl.LessonId)
-                .OnDelete(DeleteBehavior.Cascade);
 
             // Ограничение целостности CHECK на продожительность (она должна быть больше 0)
             builder

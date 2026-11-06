@@ -8,13 +8,7 @@ namespace Education.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<QuizLessonEntity> builder)
         {
-            builder.HasKey(q => q.Id);
-
-            builder
-                .HasOne(q => q.Lesson)
-                .WithOne(l => l.QuizLesson)
-                .HasForeignKey<QuizLessonEntity>(q => q.LessonId)
-                .OnDelete(DeleteBehavior.Cascade);
+            builder.ToTable("QuizLesson");
 
             builder.ToTable(q =>
             {

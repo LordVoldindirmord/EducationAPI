@@ -15,12 +15,6 @@ namespace Education.DAL.Context
 
         public DbSet<LessonEntity> Lessons { get; set; }
 
-        public DbSet<VideoLessonEntity> VideoLessons { get; set; }
-
-        public DbSet<TextLessonEntity> TextLessons { get; set; }
-
-        public DbSet<QuizLessonEntity> QuizLessons { get; set; }
-
         public DbSet<TestQuestionEntity> TestQuestions { get; set; }
 
         public DbSet<CourseMemberEntity> CourseMembers { get; set; }

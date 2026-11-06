@@ -36,6 +36,9 @@ namespace Education.DAL.Configurations
             builder
                 .HasIndex(l => new { l.ModuleId, l.OrderNumber })
                 .IsUnique();
+
+            // TPT
+            builder.UseTptMappingStrategy();
         }
 
         private static string ConvertLessonTypeToString(LessonType type) => type switch

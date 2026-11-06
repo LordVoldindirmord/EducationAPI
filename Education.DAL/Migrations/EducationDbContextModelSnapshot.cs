@@ -224,6 +224,8 @@ namespace Education.DAL.Migrations
                         .IsUnique();
 
                     b.ToTable("Lessons");
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Education.Domain.Entity.ModuleEntity", b =>
@@ -313,37 +315,6 @@ namespace Education.DAL.Migrations
                     b.UseTptMappingStrategy();
                 });
 
-            modelBuilder.Entity("Education.Domain.Entity.QuizLessonEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("LessonId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("PassingScore")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("ShowErrorsImmediately")
-                        .HasColumnType("boolean");
-
-                    b.Property<int?>("TimeLimitMinutes")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LessonId")
-                        .IsUnique();
-
-                    b.ToTable("QuizLessons", t =>
-                        {
-                            t.HasCheckConstraint("CK_QuizLessons_PassingScore", "\"PassingScore\" >= 0 AND \"PassingScore\" <= 100");
-
-                            t.HasCheckConstraint("CK_QuizLessons_TimeLimitMinutes", "\"TimeLimitMinutes\" IS NULL OR \"TimeLimitMinutes\" > 0");
-                        });
-                });
-
             modelBuilder.Entity("Education.Domain.Entity.TestQuestionEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -379,28 +350,6 @@ namespace Education.DAL.Migrations
                         .IsUnique();
 
                     b.ToTable("TestQuestions");
-                });
-
-            modelBuilder.Entity("Education.Domain.Entity.TextLessonEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(32192)
-                        .HasColumnType("character varying(32192)");
-
-                    b.Property<Guid>("LessonId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LessonId")
-                        .IsUnique();
-
-                    b.ToTable("TextLessons");
                 });
 
             modelBuilder.Entity("Education.Domain.Entity.UserEntity", b =>
@@ -510,39 +459,6 @@ namespace Education.DAL.Migrations
                     b.ToTable("UserProgresses");
                 });
 
-            modelBuilder.Entity("Education.Domain.Entity.VideoLessonEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("DurationSeconds")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("LessonId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ThumbnailPath")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.Property<string>("VideoPath")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LessonId")
-                        .IsUnique();
-
-                    b.ToTable("VideoLessons", t =>
-                        {
-                            t.HasCheckConstraint("CK_VideoLessons_DurationSeconds", "\"DurationSeconds\" > 0");
-                        });
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
@@ -644,6 +560,62 @@ namespace Education.DAL.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Education.Domain.Entity.QuizLessonEntity", b =>
+                {
+                    b.HasBaseType("Education.Domain.Entity.LessonEntity");
+
+                    b.Property<int>("PassingScore")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("ShowErrorsImmediately")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("TimeLimitMinutes")
+                        .HasColumnType("integer");
+
+                    b.ToTable("QuizLesson", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_QuizLessons_PassingScore", "\"PassingScore\" >= 0 AND \"PassingScore\" <= 100");
+
+                            t.HasCheckConstraint("CK_QuizLessons_TimeLimitMinutes", "\"TimeLimitMinutes\" IS NULL OR \"TimeLimitMinutes\" > 0");
+                        });
+                });
+
+            modelBuilder.Entity("Education.Domain.Entity.TextLessonEntity", b =>
+                {
+                    b.HasBaseType("Education.Domain.Entity.LessonEntity");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(32192)
+                        .HasColumnType("character varying(32192)");
+
+                    b.ToTable("TextLesson", (string)null);
+                });
+
+            modelBuilder.Entity("Education.Domain.Entity.VideoLessonEntity", b =>
+                {
+                    b.HasBaseType("Education.Domain.Entity.LessonEntity");
+
+                    b.Property<int>("DurationSeconds")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ThumbnailPath")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.Property<string>("VideoPath")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
+
+                    b.ToTable("VideoLesson", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_VideoLessons_DurationSeconds", "\"DurationSeconds\" > 0");
+                        });
                 });
 
             modelBuilder.Entity("Education.Domain.Entity.CoursePurchaseEntity", b =>
@@ -752,17 +724,6 @@ namespace Education.DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Education.Domain.Entity.QuizLessonEntity", b =>
-                {
-                    b.HasOne("Education.Domain.Entity.LessonEntity", "Lesson")
-                        .WithOne("QuizLesson")
-                        .HasForeignKey("Education.Domain.Entity.QuizLessonEntity", "LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Lesson");
-                });
-
             modelBuilder.Entity("Education.Domain.Entity.TestQuestionEntity", b =>
                 {
                     b.HasOne("Education.Domain.Entity.QuizLessonEntity", "QuizLesson")
@@ -772,17 +733,6 @@ namespace Education.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("QuizLesson");
-                });
-
-            modelBuilder.Entity("Education.Domain.Entity.TextLessonEntity", b =>
-                {
-                    b.HasOne("Education.Domain.Entity.LessonEntity", "Lesson")
-                        .WithOne("TextLesson")
-                        .HasForeignKey("Education.Domain.Entity.TextLessonEntity", "LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Lesson");
                 });
 
             modelBuilder.Entity("Education.Domain.Entity.UserProgressEntity", b =>
@@ -802,17 +752,6 @@ namespace Education.DAL.Migrations
                     b.Navigation("Lesson");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Education.Domain.Entity.VideoLessonEntity", b =>
-                {
-                    b.HasOne("Education.Domain.Entity.LessonEntity", "Lesson")
-                        .WithOne("VideoLesson")
-                        .HasForeignKey("Education.Domain.Entity.VideoLessonEntity", "LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Lesson");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -862,6 +801,33 @@ namespace Education.DAL.Migrations
                     b.HasOne("Education.Domain.Entity.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Education.Domain.Entity.QuizLessonEntity", b =>
+                {
+                    b.HasOne("Education.Domain.Entity.LessonEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Education.Domain.Entity.QuizLessonEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Education.Domain.Entity.TextLessonEntity", b =>
+                {
+                    b.HasOne("Education.Domain.Entity.LessonEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Education.Domain.Entity.TextLessonEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Education.Domain.Entity.VideoLessonEntity", b =>
+                {
+                    b.HasOne("Education.Domain.Entity.LessonEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Education.Domain.Entity.VideoLessonEntity", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -924,22 +890,11 @@ namespace Education.DAL.Migrations
             modelBuilder.Entity("Education.Domain.Entity.LessonEntity", b =>
                 {
                     b.Navigation("Progresses");
-
-                    b.Navigation("QuizLesson");
-
-                    b.Navigation("TextLesson");
-
-                    b.Navigation("VideoLesson");
                 });
 
             modelBuilder.Entity("Education.Domain.Entity.ModuleEntity", b =>
                 {
                     b.Navigation("Lessons");
-                });
-
-            modelBuilder.Entity("Education.Domain.Entity.QuizLessonEntity", b =>
-                {
-                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("Education.Domain.Entity.UserEntity", b =>
@@ -951,6 +906,11 @@ namespace Education.DAL.Migrations
                     b.Navigation("Purchases");
 
                     b.Navigation("UserProgresses");
+                });
+
+            modelBuilder.Entity("Education.Domain.Entity.QuizLessonEntity", b =>
+                {
+                    b.Navigation("Questions");
                 });
 #pragma warning restore 612, 618
         }

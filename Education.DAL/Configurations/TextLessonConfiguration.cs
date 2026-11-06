@@ -8,17 +8,11 @@ namespace Education.DAL.Configurations
     {
         public void Configure(EntityTypeBuilder<TextLessonEntity> builder)
         {
-            builder.HasKey(t => t.Id);
+            builder.ToTable("TextLesson");
 
             builder
                 .Property(t => t.Content)
                 .HasMaxLength(32192);
-
-            builder
-                .HasOne(t => t.Lesson)
-                .WithOne(l => l.TextLesson)
-                .HasForeignKey<TextLessonEntity>(t => t.LessonId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

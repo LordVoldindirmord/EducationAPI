@@ -1,19 +1,10 @@
 ﻿namespace Education.Domain.Entity
 {
     /// <summary>
-    /// Сущность теста урока.
-    /// <para>
-    /// Связь 1:1 с <see cref="LessonEntity"/>. Используется, когда
-    /// <see cref="LessonEntity.LessonType"/> = Quiz.
-    /// </para>
+    /// Сущность теста урока
     /// </summary>
-    public class QuizLessonEntity
+    public class QuizLessonEntity : LessonEntity
     {
-        /// <summary>
-        /// Уникальный идентификатор теста
-        /// </summary>
-        public Guid Id { get; set; }
-
         /// <summary>
         /// Проходной балл в процентах (0–100)
         /// </summary>
@@ -30,16 +21,6 @@
         public bool ShowErrorsImmediately { get; set; }
 
         // ========================= FK =========================
-
-        /// <summary>
-        /// Идентификатор урока (связь 1:1)
-        /// </summary>
-        public Guid LessonId { get; set; }
-
-        /// <summary>
-        /// Урок, к которому относится тест
-        /// </summary>
-        public LessonEntity Lesson { get; set; } = null!;
 
         /// <summary>
         /// Вопросы теста
