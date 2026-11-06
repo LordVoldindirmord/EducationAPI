@@ -19,7 +19,7 @@ namespace Education.Domain.DTO.Request.Courses.Courses
 
         public bool IsPublished { get; init; }
 
-        [DefaultValue(0)]
+        [DefaultValue(typeof(decimal), "0")]
         [Range(typeof(decimal), "0", "9999999.99", ParseLimitsInInvariantCulture = true,
             ErrorMessage = "Цена должна быть от 0 до 9999999.99")]
         public decimal Price { get; init; }
