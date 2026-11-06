@@ -1,57 +1,50 @@
+using Education.DAL.Context;
+using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
-namespace IntegrationTests.Helpers
+namespace IntegrationTests.Helpers;
+
+public sealed class PostgresFixture : IAsyncLifetime
 {
-    /// <summary>
-    /// Поднимает отдельную PostgreSQL-базу для интеграционных тестов,
-    /// чтобы не затрагивать основную базу приложения.
-    /// </summary>
-    public sealed class PostgresFixture : IAsyncLifetime
+    private readonly string _databaseName = $"education_it_{Guid.NewGuid():N}";
+    private string _adminConnection = null!;
+    private bool _created;
+    public string ConnectionString { get; private set; } = null!;
+
+    public async Task InitializeAsync()
     {
-        private const string Host = "localhost";
-        private const int Port = 5432;
-        private const string Username = "postgres";
-        private const string Password = "1234";
-
-        private readonly string _databaseName = $"education_it_{Guid.NewGuid():N}";
-
-        public string ConnectionString { get; private set; } = null!;
-
-        public async Task InitializeAsync()
-        {
-            await ExecuteOnAdminAsync($@"CREATE DATABASE ""{_databaseName}""");
-
-            ConnectionString =
-                $"Host={Host};Port={Port};Database={_databaseName};Username={Username};Password={Password}";
-
-            await AuthTestHost.InitializeDatabaseAsync(ConnectionString);
-        }
-
-        public async Task DisposeAsync()
-        {
-            await ExecuteOnAdminAsync(
-                $@"SELECT pg_terminate_backend(pid)
-                   FROM pg_stat_activity
-                   WHERE datname = '{_databaseName}' AND pid <> pg_backend_pid();");
-
-            await ExecuteOnAdminAsync($@"DROP DATABASE IF EXISTS ""{_databaseName}""");
-        }
-
-        private static async Task ExecuteOnAdminAsync(string sql)
-        {
-            var adminConnection =
-                $"Host={Host};Port={Port};Database=postgres;Username={Username};Password={Password}";
-
-            await using var connection = new NpgsqlConnection(adminConnection);
-            await connection.OpenAsync();
-            await using var command = new NpgsqlCommand(sql, connection);
-            await command.ExecuteNonQueryAsync();
-        }
+        // Only the server credentials are reused. Never migrate or reset the supplied database.
+        var settings = new NpgsqlConnectionStringBuilder(
+            Environment.GetEnvironmentVariable("EDUCATION_TEST_POSTGRES")
+            ?? "Host=localhost;Port=5432;Username=postgres;Password=1234")
+        { Database = "postgres", Pooling = false, Timeout = 5 };
+        _adminConnection = settings.ConnectionString;
+        await ExecuteOnAdminAsync($"CREATE DATABASE \"{_databaseName}\"");
+        _created = true;
+        settings.Database = _databaseName;
+        ConnectionString = settings.ConnectionString;
+        await using var db = new EducationDbContext(new DbContextOptionsBuilder<EducationDbContext>()
+            .UseNpgsql(ConnectionString).Options);
+        await db.Database.MigrateAsync();
     }
 
-    [CollectionDefinition(Name)]
-    public sealed class AuthIntegrationCollection : ICollectionFixture<PostgresFixture>
+    public async Task DisposeAsync()
     {
-        public const string Name = "AuthIntegration";
+        if (_created)
+            await ExecuteOnAdminAsync($"DROP DATABASE IF EXISTS \"{_databaseName}\" WITH (FORCE)");
     }
+
+    private async Task ExecuteOnAdminAsync(string sql)
+    {
+        await using var connection = new NpgsqlConnection(_adminConnection);
+        await connection.OpenAsync();
+        await using var command = new NpgsqlCommand(sql, connection);
+        await command.ExecuteNonQueryAsync();
+    }
+}
+
+[CollectionDefinition(Name)]
+public sealed class AuthIntegrationCollection : ICollectionFixture<PostgresFixture>
+{
+    public const string Name = "HTTP integration";
 }

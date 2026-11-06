@@ -32,5 +32,21 @@ namespace Education.Domain.ResponseModel
             Data = Data,
             IsSuccess = IsSuccess,
         };
+
+        /// <summary>
+        /// Переупаковать ответ с другим типом данных (Data будет null/default).
+        /// Используется, когда нужно вернуть ошибку из метода, который ожидает другой тип.
+        /// </summary>
+        /// <typeparam name="TNew">Новый тип данных</typeparam>
+        /// <returns>Новый InternalResponse с тем же статусом и описанием, но с Data = default</returns>
+        public InternalResponse<TNew> Repack<TNew>()
+        {
+            return new InternalResponse<TNew>
+            {
+                StatusCode = this.StatusCode,
+                Description = this.Description,
+                Data = default
+            };
+        }
     }
 }

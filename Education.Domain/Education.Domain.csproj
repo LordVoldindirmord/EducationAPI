@@ -16,4 +16,8 @@
     <Folder Include="DTO\Response\Courses\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
 </Project>

@@ -34,9 +34,10 @@ namespace Education.Service.Courses.Interfaces
         Task<InternalResponse<bool>> UpdateCourseAsync(UpdateCourseRequest request, Guid userId);
 
         /// <summary>
-        /// Удалить курс.
+        /// Удалить курс вместе с модулями, уроками и файлами.
         /// <para>
         /// Доступно для локальной роли курса Owner.
+        /// Запрещено при успешных покупках (в том числе возвращенных) и ожидающих платежах.
         /// </para>
         /// </summary>
         /// <param name="request">Данные для удаления курса</param>

@@ -37,3 +37,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Необходимо для интеграционных тестов
+public partial class Program { }

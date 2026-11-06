@@ -89,7 +89,7 @@ namespace Education.Service.Purchases.Implementations
 
             // Парсинг в ответ, если что-то пошло не так
             if (!response.IsSuccess)
-                return ParseInvalidInternalResponse<PaymentResult, CourseEntity>(response);
+                return response.Repack<PaymentResult>();
 
             // Создание платежа
             var paymentResult = await _paymentService
@@ -123,7 +123,7 @@ namespace Education.Service.Purchases.Implementations
 
             // Парсинг в ответ, если что-то пошло не так
             if (!role.IsSuccess)
-                return ParseInvalidInternalResponse<PaymentResult, AppRoleEntity>(role);
+                return role.Repack<PaymentResult>();
 
             // Создание платежа
             var paymentResult = await _paymentService.CreatePaymentAsync(
@@ -175,19 +175,5 @@ namespace Education.Service.Purchases.Implementations
                 _ => CreatorResponse.InternalError<bool>($"Неизвестный тип платежа: {purchase.PurchaseType}")
             };
         }
-
-        /// <summary>
-        /// Парсинг из InternalResponse в InternalResponse, но с другим типом (тип будет null)
-        /// </summary>
-        /// <typeparam name="T1">Требуемый тип InternalResponse</typeparam>
-        /// <typeparam name="T2">Тип данных в InternalResponse, из которого будем парсить</typeparam>
-        /// <param name="response">Исходный InternalResponse</param>
-        /// <returns>Итоговый InternalResponse</returns>
-        private static InternalResponse<T1> ParseInvalidInternalResponse<T1, T2>(InternalResponse<T2> response) =>
-            new InternalResponse<T1>
-            {
-                Description = response.Description,
-                StatusCode = response.StatusCode
-            };
     }
 }
